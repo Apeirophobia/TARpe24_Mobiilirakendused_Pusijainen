@@ -1,5 +1,4 @@
-﻿using AndroidX.RecyclerView.Widget;
-using System.Runtime.InteropServices.ObjectiveC;
+﻿using System.Runtime.InteropServices.ObjectiveC;
 
 namespace TARpe24_Mobiilirakendused_Pusijainen
 {

@@ -11,7 +11,15 @@ namespace TARpe24_Mobiilirakendused_Pusijainen
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            var startPage = new StartPage();
+
+            var navPage = new NavigationPage(startPage)
+            {
+                BarBackgroundColor = Colors.GreenYellow,
+                BarTextColor = Colors.Black
+            };
+
+            return new Window(navPage);
         }
     }
 }
