@@ -10,6 +10,8 @@ public partial class SnowmanPage : ContentPage
 	Frame head;
 	Frame upperBody;
 	Frame lowerBody;
+    Frame upperButton;
+    Frame lowerButton;
 
     Label opacityLabel;
     Slider opacitySlider;
@@ -17,12 +19,15 @@ public partial class SnowmanPage : ContentPage
     Picker pickle;
     Button pickleButton;
 
+    Label tempoLabel;
     Stepper tempoStepper;
+
+    Image face;
 
     List<View> parts;
 
     AbsoluteLayout al;
-	
+    double bpm;
 	public SnowmanPage()
 	{
 		//InitializeComponent();
@@ -55,6 +60,14 @@ public partial class SnowmanPage : ContentPage
             BorderColor = Colors.Black,
             ZIndex = 2
         };
+        upperButton = new Frame
+        {
+            BackgroundColor = Colors.Black,
+            HeightRequest = 20,
+            WidthRequest = 20,
+            CornerRadius = 20,
+            ZIndex = 2
+        };
 
         lowerBody = new Frame
         {
@@ -63,6 +76,15 @@ public partial class SnowmanPage : ContentPage
             WidthRequest = 175,
             CornerRadius = 175,
             BorderColor = Colors.Black,
+            ZIndex = 1
+        };
+
+        lowerButton = new Frame
+        {
+            BackgroundColor = Colors.Black,
+            HeightRequest = 20,
+            WidthRequest = 20,
+            CornerRadius = 20,
             ZIndex = 1
         };
 
@@ -88,8 +110,24 @@ public partial class SnowmanPage : ContentPage
             Minimum = 60,
             Maximum = 180,
             WidthRequest = 100,
-            Value = 130 // Call Me Maybe
+            Value = 70 // The Bold Arrow of Time
         };
+        tempoLabel = new Label
+        {
+            WidthRequest = 100,
+            HeightRequest = 50,
+            Text = $"{tempoStepper.Value} BPM"
+        };
+
+        face = new Image
+        {
+            Source = "face.png",
+            HeightRequest = 80,
+            WidthRequest = 80,
+            ZIndex = 3
+        };
+
+        
 
         var items = new List<string> {"Peida", "Näita", "Muuda värvi", "Sulata", "Tantsi"};
 
@@ -108,9 +146,10 @@ public partial class SnowmanPage : ContentPage
 
         opacitySlider.ValueChanged += SetOpacity;
         pickleButton.Pressed += OnPickerSelected;
+        tempoStepper.ValueChanged += SetTempo;
 
-        al = new AbsoluteLayout { Children = { bucket, head ,upperBody, lowerBody, opacitySlider, opacityLabel, pickle, pickleButton} };
-        parts = new List<View> { bucket, head, upperBody, lowerBody };
+        al = new AbsoluteLayout { Children = { bucket, head ,upperBody, lowerBody, opacitySlider, opacityLabel, pickle, pickleButton, tempoStepper, tempoLabel, face, upperButton, lowerButton} };
+        parts = new List<View> { bucket, head, upperBody, lowerBody, upperButton, lowerButton, face };
         
         AbsoluteLayout.SetLayoutBounds(parts[0], new Rect(0.35, 0.15, parts[0].Width, parts[0].Height));
         AbsoluteLayout.SetLayoutFlags(parts[0], AbsoluteLayoutFlags.PositionProportional);
@@ -118,11 +157,20 @@ public partial class SnowmanPage : ContentPage
         AbsoluteLayout.SetLayoutBounds(parts[1], new Rect(0.35, 0.29, parts[1].Width, parts[1].Height));
         AbsoluteLayout.SetLayoutFlags(parts[1], AbsoluteLayoutFlags.PositionProportional);
 
+        AbsoluteLayout.SetLayoutBounds(face, new Rect(0.37, 0.31, face.Width, face.Height));
+        AbsoluteLayout.SetLayoutFlags(face, AbsoluteLayoutFlags.PositionProportional);
+
         AbsoluteLayout.SetLayoutBounds(parts[2], new Rect(0.35, 0.54, parts[2].Width, parts[2].Height));
         AbsoluteLayout.SetLayoutFlags(parts[2], AbsoluteLayoutFlags.PositionProportional);
 
+        AbsoluteLayout.SetLayoutBounds(upperButton, new Rect(0.365, 0.54, upperButton.Width, upperButton.Height));
+        AbsoluteLayout.SetLayoutFlags(upperButton, AbsoluteLayoutFlags.PositionProportional);
+
         AbsoluteLayout.SetLayoutBounds(parts[3], new Rect(0.35, 0.86, parts[3].Width, parts[3].Height));
         AbsoluteLayout.SetLayoutFlags(parts[3], AbsoluteLayoutFlags.PositionProportional);
+
+        AbsoluteLayout.SetLayoutBounds(lowerButton, new Rect(0.365, 0.77, lowerButton.Width, lowerButton.Height));
+        AbsoluteLayout.SetLayoutFlags(lowerButton, AbsoluteLayoutFlags.PositionProportional);
 
         AbsoluteLayout.SetLayoutBounds(opacitySlider, new Rect(0.65, 0.29, opacitySlider.Width, 50));
         AbsoluteLayout.SetLayoutFlags(opacitySlider, AbsoluteLayoutFlags.PositionProportional);
@@ -139,6 +187,9 @@ public partial class SnowmanPage : ContentPage
         AbsoluteLayout.SetLayoutBounds(tempoStepper, new Rect(0.65, 0.6, tempoStepper.Width, 50));
         AbsoluteLayout.SetLayoutFlags(tempoStepper, AbsoluteLayoutFlags.PositionProportional);
 
+        AbsoluteLayout.SetLayoutBounds(tempoLabel, new Rect(0.65, 0.7, tempoLabel.Width, tempoLabel.Height));
+        AbsoluteLayout.SetLayoutFlags(tempoLabel, AbsoluteLayoutFlags.PositionProportional);
+
 
         Content = al;
 	}
@@ -150,6 +201,13 @@ public partial class SnowmanPage : ContentPage
         {
             parts[i].Opacity = (double)e.NewValue;
         }
+    }
+
+    public void SetTempo(object? sender, ValueChangedEventArgs e)
+    {
+
+        bpm = e.NewValue;
+        tempoLabel.Text = string.Format("{0} BPM", bpm);
     }
 
     public void OnPickerSelected(object? sender, EventArgs e)
@@ -220,7 +278,7 @@ public partial class SnowmanPage : ContentPage
 
     public async void Dance()
     {
-        double bpm = tempoStepper.Value;
+        bpm = tempoStepper.Value;
         double interval = Math.Round((double)(60 / bpm) * 1000, 0);
         uint animLen = (uint)interval;
 
@@ -233,8 +291,11 @@ public partial class SnowmanPage : ContentPage
             //lowerBody.RotateToAsync(15, 200),
 
             head.TranslateToAsync(-15, -10, animLen, Easing.Linear),
+            face.TranslateToAsync(-15, -10, animLen, Easing.Linear),
             upperBody.TranslateToAsync(-25, -20, animLen, Easing.Linear),
-            lowerBody.TranslateToAsync(-35, -30, animLen, Easing.Linear)
+            upperButton.TranslateToAsync(-25, -20, animLen, Easing.Linear),
+            lowerBody.TranslateToAsync(-35, -30, animLen, Easing.Linear),
+            lowerButton.TranslateToAsync(-35, -30, animLen, Easing.Linear)
             );
 
             await Task.WhenAll(
@@ -244,8 +305,11 @@ public partial class SnowmanPage : ContentPage
                 //lowerBody.RotateToAsync(15, 200),
 
                 head.TranslateToAsync(0, 0, animLen, Easing.Linear),
+                face.TranslateToAsync(0, 0, animLen, Easing.Linear),
                 upperBody.TranslateToAsync(0, 0, animLen, Easing.Linear),
-                lowerBody.TranslateToAsync(0, 0, animLen, Easing.Linear)
+                upperButton.TranslateToAsync(0, 0, animLen, Easing.Linear),
+                lowerBody.TranslateToAsync(0, 0, animLen, Easing.Linear),
+                lowerButton.TranslateToAsync(0, 0, animLen, Easing.Linear)
                 );
 
             await Task.WhenAll(
@@ -255,8 +319,11 @@ public partial class SnowmanPage : ContentPage
                 //lowerBody.RotateToAsync(15, 200),
 
                 head.TranslateToAsync(15, -10, animLen, Easing.Linear),
+                face.TranslateToAsync(15, -10, animLen, Easing.Linear),
                 upperBody.TranslateToAsync(25, -20, animLen, Easing.Linear),
-                lowerBody.TranslateToAsync(35, -30, animLen, Easing.Linear)
+                upperButton.TranslateToAsync(25, -20, animLen, Easing.Linear),
+                lowerBody.TranslateToAsync(35, -30, animLen, Easing.Linear),
+                lowerButton.TranslateToAsync(35, -30, animLen, Easing.Linear)
                 );
 
             await Task.WhenAll(
@@ -266,8 +333,11 @@ public partial class SnowmanPage : ContentPage
                 //lowerBody.RotateToAsync(15, 200),
 
                 head.TranslateToAsync(0, 0, animLen, Easing.Linear),
+                face.TranslateToAsync(0, 0, animLen, Easing.Linear),
                 upperBody.TranslateToAsync(0, 0, animLen, Easing.Linear),
-                lowerBody.TranslateToAsync(0, 0, animLen, Easing.Linear)
+                upperButton.TranslateToAsync(0, 0, animLen, Easing.Linear),
+                lowerBody.TranslateToAsync(0, 0, animLen, Easing.Linear),
+                lowerButton.TranslateToAsync(0, 0, animLen, Easing.Linear)
                 );
         }
 
