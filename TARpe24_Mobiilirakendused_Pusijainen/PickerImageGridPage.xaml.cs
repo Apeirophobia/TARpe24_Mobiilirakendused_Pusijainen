@@ -38,7 +38,7 @@ public partial class PickerImageGridPage : ContentPage
 		picker.SelectedIndexChanged += Piltide_valik;
 		img = new Image
 		{
-			Source = "dotnet_bot.png",
+			Source = "cow_emoji.png",
 			HorizontalOptions = LayoutOptions.Center
 		};
 
