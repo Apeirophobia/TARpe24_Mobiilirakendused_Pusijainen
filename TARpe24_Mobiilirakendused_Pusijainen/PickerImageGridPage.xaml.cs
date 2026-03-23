@@ -26,6 +26,7 @@ public partial class PickerImageGridPage : ContentPage
 				new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star)},
 				new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star)}
 			}
+			
 		};
 
 		picker = new Picker
