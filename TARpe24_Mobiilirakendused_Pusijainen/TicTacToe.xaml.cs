@@ -1,15 +1,21 @@
-
 namespace TARpe24_Mobiilirakendused_Pusijainen;
 
 public partial class TicTacToe : ContentPage
 {
-	Grid mainGrid = new Grid();
+	Grid mainGrid = new Grid()
+    {
+        RowSpacing = 20,
+        ColumnSpacing = 20
+    };
+
     Image x = new Image { Source = "x.png" };
     Image o = new Image { Source = "o.png" };
 	bool XO = false;
 
     public TicTacToe()
 	{
+
+        BackgroundColor = Colors.Black;
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -23,7 +29,7 @@ public partial class TicTacToe : ContentPage
 			{
 				BoxView box = new BoxView
 				{
-					BackgroundColor  = Colors.Black
+					BackgroundColor  = Colors.White,
 				};
 
 				mainGrid.Add(box, column, row);
@@ -33,7 +39,7 @@ public partial class TicTacToe : ContentPage
 				TapGestureRecognizer tap = new TapGestureRecognizer();
 				tap.Tapped += async (sender, args) =>
 				{
-					box.BackgroundColor = Colors.Black;
+					box.BackgroundColor = Colors.White;
 					//await DisplayAlertAsync("Koordinaadid", $"Rida: {r+1} Veerg: {c+1}", "Selge");
 					
 					ReplaceBoxWithAnImage(mainGrid.IndexOf(box), r, c);
@@ -44,10 +50,11 @@ public partial class TicTacToe : ContentPage
 		}
 
         Content = mainGrid;
-		
-	}
 
-	public async void ReplaceBoxWithAnImage(int index, int row, int column)
+
+    }
+
+    public async void ReplaceBoxWithAnImage(int index, int row, int column)
 	{
 		mainGrid.RemoveAt(index);
         Image x = new Image { Source = "x.png", ZIndex = 0};
@@ -175,63 +182,149 @@ public partial class TicTacToe : ContentPage
         return winStates;
     }
 
-	public async void CheckDiagonalRows()
+	public async Task<List<bool>> CheckDiagonalOne()
 	{
         List<int> combinationOne = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
         bool xWin = true;
         bool oWin = true;
         int imageCount = 0;
 
-		foreach (var child in mainGrid.Children)
+		foreach (var child in mainGrid.Children) // FIRST DIAGONAL
 		{
-			if (mainGrid.GetRow(child) == 0 && mainGrid.GetColumn(child) == 0)
+			if (child is Image)
 			{
-				if (child.ZIndex == 1) // If column contains O, xWin = false
-				{
-					xWin = false;
-				}
-
-				if (child.ZIndex == 0) // If column contains X, oWin = false
-				{
-					oWin = false;
-				}
-				continue;
-			}
-			else if (mainGrid.GetRow(child) == 1 && mainGrid.GetColumn(child) == 1)
-			{
-				if (child.ZIndex == 1) // If column contains O, xWin = false
-				{
-					xWin = false;
-				}
-
-				if (child.ZIndex == 0) // If column contains X, oWin = false
-				{
-					oWin = false;
-				}
-				continue;
-			}
-			else if (mainGrid.GetRow(child) == 2 && mainGrid.GetColumn(child) == 2)
-			{
-                if (child.ZIndex == 1) // If column contains O, xWin = false
+                if (mainGrid.GetRow(child) == 0 && mainGrid.GetColumn(child) == 0)
                 {
-                    xWin = false;
+                    if (child.ZIndex == 1) // If column contains O, xWin = false
+                    {
+                        xWin = false;
+                    }
+
+                    if (child.ZIndex == 0) // If column contains X, oWin = false
+                    {
+                        oWin = false;
+                    }
+                    imageCount += 1;
+                    continue;
                 }
-
-                if (child.ZIndex == 0) // If column contains X, oWin = false
+                else if (mainGrid.GetRow(child) == 1 && mainGrid.GetColumn(child) == 1)
                 {
-                    oWin = false;
+                    if (child.ZIndex == 1) // If column contains O, xWin = false
+                    {
+                        xWin = false;
+                    }
+
+                    if (child.ZIndex == 0) // If column contains X, oWin = false
+                    {
+                        oWin = false;
+                    }
+                    imageCount += 1;
+
+                    continue;
+                }
+                else if (mainGrid.GetRow(child) == 2 && mainGrid.GetColumn(child) == 2)
+                {
+                    if (child.ZIndex == 1) // If column contains O, xWin = false
+                    {
+                        xWin = false;
+                    }
+
+                    if (child.ZIndex == 0) // If column contains X, oWin = false
+                    {
+                        oWin = false;
+                    }
+                    imageCount += 1;
+                    continue;
                 }
             }
 		}
 
-	}
+        if (imageCount < 3)
+        {
+            xWin = false;
+            oWin = false;
+        }
+
+        List<bool> winStates = new List<bool>() { xWin, oWin };
+        return winStates;
+
+    }
+
+    public async Task<List<bool>> CheckDiagonalTwo()
+    {
+        List<int> combinationOne = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+        bool xWin = true;
+        bool oWin = true;
+        int imageCount = 0;
+
+        foreach (var child in mainGrid.Children) // SECOND DIAGONAL
+        {
+            if (child is Image)
+            {
+                if (mainGrid.GetRow(child) == 0 && mainGrid.GetColumn(child) == 2)
+                {
+                    if (child.ZIndex == 1) // If column contains O, xWin = false
+                    {
+                        xWin = false;
+                    }
+
+                    if (child.ZIndex == 0) // If column contains X, oWin = false
+                    {
+                        oWin = false;
+                    }
+                    imageCount += 1;
+                    continue;
+                }
+                else if (mainGrid.GetRow(child) == 1 && mainGrid.GetColumn(child) == 1)
+                {
+                    if (child.ZIndex == 1) // If column contains O, xWin = false
+                    {
+                        xWin = false;
+                    }
+
+                    if (child.ZIndex == 0) // If column contains X, oWin = false
+                    {
+                        oWin = false;
+                    }
+                    imageCount += 1;
+
+                    continue;
+                }
+                else if (mainGrid.GetRow(child) == 2 && mainGrid.GetColumn(child) == 0)
+                {
+                    if (child.ZIndex == 1) // If column contains O, xWin = false
+                    {
+                        xWin = false;
+                    }
+
+                    if (child.ZIndex == 0) // If column contains X, oWin = false
+                    {
+                        oWin = false;
+                    }
+                    imageCount += 1;
+                    continue;
+                }
+            }
+        }
+
+        if (imageCount < 3)
+        {
+            xWin = false;
+            oWin = false;
+        }
+
+        List<bool> winStates = new List<bool>() { xWin, oWin };
+        return winStates;
+    }
 
 	public async void CheckGameState(int rowIndex, int columnIndex)
 	{
 		List<bool> winStates = new List<bool>() { false, false };
 		List<bool> winStatesHorizontal;
 		List<bool> winStatesVertical;
-		List<bool> winStatesDiagonal;
+		List<bool> winStatesDiagonalOne;
+		List<bool> winStatesDiagonalTwo;
+
 		winStatesHorizontal = await CheckHorizontalRows(rowIndex);
 		if (winStatesHorizontal[0] == true)
 		{
@@ -252,9 +345,32 @@ public partial class TicTacToe : ContentPage
 		{
 			winStates[1] = true;
 		}
-		// await DisplayAlertAsync("Excuse me", $"X: {winStates[0]} O: {winStates[1]}", "OK"); // Display current state
 
-		if (winStates[0] == true || winStates[1] == true)
+		winStatesDiagonalOne = await CheckDiagonalOne();
+
+        if (winStatesDiagonalOne[0] == true)
+        {
+            winStates[0] = true;
+        }
+        else if (winStatesDiagonalOne[1] == true)
+        {
+            winStates[1] = true;
+        }
+
+		winStatesDiagonalTwo = await CheckDiagonalTwo();
+
+        if (winStatesDiagonalTwo[0] == true)
+        {
+            winStates[0] = true;
+        }
+        else if (winStatesDiagonalTwo[1] == true)
+        {
+            winStates[1] = true;
+        }
+
+        // await DisplayAlertAsync("Excuse me", $"X: {winStates[0]} O: {winStates[1]}", "OK"); // Display current state
+
+        if (winStates[0] == true || winStates[1] == true)
 		{
 			if (winStates[0])
 			{
@@ -284,7 +400,7 @@ public partial class TicTacToe : ContentPage
             {
                 BoxView box = new BoxView
                 {
-                    BackgroundColor = Colors.Black
+                    BackgroundColor = Colors.White
                 };
 
                 mainGrid.Add(box, column, row);
@@ -294,7 +410,7 @@ public partial class TicTacToe : ContentPage
                 TapGestureRecognizer tap = new TapGestureRecognizer();
                 tap.Tapped += async (sender, args) =>
                 {
-                    box.BackgroundColor = Colors.Black;
+                    box.BackgroundColor = Colors.White;
                     //await DisplayAlertAsync("Koordinaadid", $"Rida: {r+1} Veerg: {c+1}", "Selge");
 
                     ReplaceBoxWithAnImage(mainGrid.IndexOf(box), r, c);
