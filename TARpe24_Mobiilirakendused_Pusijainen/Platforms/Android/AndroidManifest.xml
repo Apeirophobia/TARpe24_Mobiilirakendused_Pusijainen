@@ -6,6 +6,12 @@
 	<queries>
 		<intent>
 			<action android:name="android.intent.action.VIEW" />
+			<data android:scheme="smsto" />
+		</intent>
+	</queries>
+	<queries>
+		<intent>
+			<action android:name="android.intent.action.DIAL" />
 			<data android:scheme="tel" />
 		</intent>
 	</queries>

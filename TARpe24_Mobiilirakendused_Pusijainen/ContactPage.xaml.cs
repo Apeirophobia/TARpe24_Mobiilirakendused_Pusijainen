@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging.Abstractions;
+
 namespace TARpe24_Mobiilirakendused_Pusijainen;
 
 public partial class ContactPage : ContentPage
@@ -6,6 +8,7 @@ public partial class ContactPage : ContentPage
 	ImageCell ic;
 	EntryCell phoneMail;
 	Button emailButton;
+	Button phoneButton;
 
 	public ContactPage()
 	{
@@ -27,7 +30,13 @@ public partial class ContactPage : ContentPage
 			Text = "Saada email"
 		};
 
+		phoneButton = new Button
+		{
+			Text = "Saada SMS"
+		};
+
 		emailButton.Clicked += Saada_email_Clicked;
+		phoneButton.Clicked += Saada_SMS_Clicked;
 
 		tableView = new TableView
 		{
@@ -69,7 +78,7 @@ public partial class ContactPage : ContentPage
 
 		HorizontalStackLayout hst = new HorizontalStackLayout
 		{
-			Children = {emailButton}
+			Children = {emailButton, phoneButton}
 		};
 
 		VerticalStackLayout vst = new VerticalStackLayout
@@ -99,6 +108,17 @@ public partial class ContactPage : ContentPage
 		else
 		{
 			await DisplayAlertAsync("Viga", "Emaili saatmine pole selles seadmes toetatud", "OK");
+		}
+	}
+
+	private async void Saada_SMS_Clicked(object? sender, EventArgs e)
+	{
+		string phone = phoneMail.Text;
+		var message = "Juustus on augud";
+		SmsMessage sms = new SmsMessage(message, phone);
+		if (phone != null && Sms.Default.IsComposeSupported)
+		{
+			await Sms.Default.ComposeAsync(sms);
 		}
 	}
 }
