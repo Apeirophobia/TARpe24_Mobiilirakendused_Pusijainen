@@ -30,10 +30,11 @@ public partial class ListPage : ContentPage
 		// Algandmete  laadimine
 		telefons = new ObservableCollection<Telefon>
 		{
-			new Telefon { Nimetus = "Samsung Galaxy S22 Ultra", Tootja="Samsung", Hind=1349, Pilt="Galaxy.png"},
-			new Telefon { Nimetus = "Xiaomi Mi 11 Lite 5G NE", Tootja="Xiaomi", Hind=399, Pilt="default_phone.png"},
-			new Telefon { Nimetus = "iPhone 13 Mini", Tootja="Apple", Hind=1179, Pilt="iPhone13.png"},
+			new Telefon { Nimetus = "Samsung Galaxy S22 Ultra", Tootja="Samsung", Hind=1349, Pilt="cow_emoji.png"},
+			new Telefon { Nimetus = "Xiaomi Mi 11 Lite 5G NE", Tootja="Xiaomi", Hind=399, Pilt="cow_emoji.png"},
+			new Telefon { Nimetus = "iPhone 13 Mini", Tootja="Apple", Hind=1179, Pilt="lehmnostardamus.png"},
 		};
+
 
 		// 1. SISESTUSVÄLJAD
 		entryNimetus = new Entry { Placeholder = "Telefoni mudel (nt iPhone 14)" };
@@ -75,6 +76,7 @@ public partial class ListPage : ContentPage
 				VerticalOptions = LayoutOptions.Center,
 				Margin = new Thickness(0, 0, 10, 0) // Veeris paremal
 			};
+			imgPilt.SetBinding(Image.SourceProperty, "Pilt");
 
 			// Tekstide elemendid
 			Label lblNimetus = new Label { FontSize = 18, FontAttributes = FontAttributes.Bold };
@@ -153,7 +155,7 @@ public partial class ListPage : ContentPage
 			int.TryParse(entryHind.Text, out hind);
 
 			// Kui pilti ei valitud, kasutame vaikimisi faili
-			string pildiNimi = string.IsNullOrWhiteSpace(valitudPildiTee) ? "default_phone.png" : valitudPildiTee;
+			string pildiNimi = string.IsNullOrWhiteSpace(valitudPildiTee) ? "cow_emoji.png" : valitudPildiTee;
 
 			telefons.Add(new Telefon
 			{

@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Net.Mime;
 
 namespace TARpe24_Mobiilirakendused_Pusijainen;
-
+/*
 public class Riik
 {
 	public string Nimi { get; set; }
@@ -81,3 +81,5 @@ public partial class EuroopaPage : ContentPage
 		// InitializeComponent();
 	}
 }
+
+*/

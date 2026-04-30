@@ -90,6 +90,9 @@
 	  <MauiXaml Update="Riddles.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="RiikPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SnowmanPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

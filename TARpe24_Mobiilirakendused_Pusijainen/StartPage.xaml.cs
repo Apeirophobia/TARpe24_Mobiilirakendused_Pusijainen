@@ -10,7 +10,7 @@ public partial class StartPage : ContentPage
 		new StepperSliderPage(), new RGBPage(), new SnowmanPage(), 
 		new PopUpPage(), new Riddles(), new PickerImageGridPage(), 
 		new TicTacToe(), new TablePage(), new ContactPage(),
-		new CarouselPage(),new ListPage(), new EuroopaPage()};
+		new CarouselPage(),new ListPage(), new RiikPage()};
 	public List<string> LeheNimed = new List<string>() { "Lehma Klikker", "Valgusfoor", "Aeg", 
 		"Stepper/Slider", "RGB Värvid", "Lumememm", 
 		"PopUpPage", "Mõistatused", "Piltide Valimine", 
